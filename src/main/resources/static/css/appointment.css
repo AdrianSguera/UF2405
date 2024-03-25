@@ -1,0 +1,20 @@
+/* Estilos para el calendario */
+#calendar {
+    font-family: Arial, sans-serif;
+    border-collapse: collapse;
+}
+
+#calendar th, #calendar td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    width: 50px; /* Ancho fijo para todas las celdas */
+}
+
+#calendar th {
+    background-color: #f2f2f2;
+}
+
+.special-day {
+    background-color: lightgreen; /* Cambia el color de fondo para los días especiales */
+}
