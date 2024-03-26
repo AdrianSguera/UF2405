@@ -27,7 +27,6 @@ public class AppointmentController {
     @GetMapping("/appointment")
     public String getAppointment(Model model){
         model.addAttribute("operationNames", getOperationNames());
-        model.addAttribute("availableDays", getAvailableDays());
         return "appointment";
     }
 
@@ -44,15 +43,5 @@ public class AppointmentController {
             operationNames.add(operation.getName());
         }
         return operationNames;
-    }
-
-    private List<Integer> getAvailableDays(){
-        List<Integer> availableDays = new ArrayList<>();
-        for (int i = 1; i < 32; i++) {
-            List<Appointment> appointmentList = appointmentService.getAllAppointmentsByDay(i);
-            if (appointmentList.size()<5)
-                availableDays.add(i);
-        }
-        return availableDays;
     }
 }

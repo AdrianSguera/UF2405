@@ -27,7 +27,11 @@ public class AppointmentService {
         return operationRepository.findAll();
     }
 
-    public List<Appointment> getAllAppointmentsByDay(Integer day) {
+    public List<Appointment> getAllAppointmentsByDayCurrentMonth(Integer day) {
         return appointmentRepository.findAllByDate(LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonth(),day));
+    }
+
+    public List<Appointment> getAllAppointmentsByDayNextMonth(Integer day) {
+        return appointmentRepository.findAllByDate(LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonth().plus(1),day));
     }
 }
