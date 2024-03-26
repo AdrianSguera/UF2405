@@ -3,14 +3,14 @@ package com.ceica.firstspringcomplete.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table
+@Table(name = "timeband")
 public class TimeBand {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String timeBand;
+    private String name;
 
     public TimeBand() {
     }
@@ -24,10 +24,10 @@ public class TimeBand {
     }
 
     public String getTimeBand() {
-        return timeBand;
+        return name;
     }
 
     public void setTimeBand(String timeBand) {
-        this.timeBand = timeBand;
+        this.name = timeBand;
     }
 }

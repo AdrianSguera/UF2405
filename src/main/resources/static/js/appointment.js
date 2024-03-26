@@ -11,6 +11,7 @@ function backDateSection() {
 function nextDateSection() {
     document.getElementById("date-section").style.display = "none";
     document.getElementById("confirmation-section").style.display = "block";
+    showConfirmationDetails()
 }
 
 function backConfirmationSection() {
@@ -21,23 +22,33 @@ function backConfirmationSection() {
 
 document.addEventListener("DOMContentLoaded", function() {
     generateCalendar();
-
-    // Ocultar el botón "Previous Month" al cargar la página
-    document.getElementById('prevMonthBtn').style.display = 'none';
 });
 
 function generateCalendar() {
+    // Obtener el mes y año actual
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
 
-        // Realizar solicitud AJAX para obtener los specialDays del mes actual
-    fetch('/available_days_current')
+    // Realizar solicitud AJAX para obtener los specialDays del mes actual
+    fetch(location.origin + "/available_days_current")
         .then(response => response.json())
         .then(specialDaysCurrent => {
+            // Generar el calendario para el mes actual
+            const currentCalendar = generateMonthCalendarHTML(currentMonth, currentYear, specialDaysCurrent);
+            document.getElementById('calendarContainer').appendChild(currentCalendar);
+
+            // Calcular el mes siguiente
+            const nextMonth = (currentMonth + 1) % 12; // Asegurar que esté en el rango 0-11
+            const nextYear = nextMonth === 0 ? currentYear + 1 : currentYear; // Incrementar el año si el mes es diciembre
+
             // Realizar solicitud AJAX para obtener los specialDays del mes siguiente
-            fetch('/available_days_next')
+            fetch(location.origin + "/available_days_next")
                 .then(response => response.json())
                 .then(specialDaysNext => {
-                    // Generar el calendario con los specialDays obtenidos
-                    generateCalendarHTML(specialDaysCurrent, specialDaysNext);
+                    // Generar el calendario para el mes siguiente
+                    const nextCalendar = generateMonthCalendarHTML(nextMonth, nextYear, specialDaysNext);
+                    document.getElementById('calendarContainer').appendChild(nextCalendar);
                 })
                 .catch(error => {
                     console.error('Error al obtener specialDays del próximo mes:', error);
@@ -48,104 +59,149 @@ function generateCalendar() {
         });
 }
 
-function generateCalendarHTML(specialDaysCurrent, specialDaysNext) {
-    // Obtener el elemento de la tabla del calendario
-    const calendar = document.getElementById('calendar');
 
-    // Limpiar el contenido existente de la tabla
-    calendar.innerHTML = '';
+function generateMonthCalendarHTML(month, year, specialDays) {
+    // Obtener el nombre del mes
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const monthName = monthNames[month];
 
-    // Obtener el mes actual y el siguiente
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getFullYear();
-    const nextDate = new Date(currentDate);
-    nextDate.setMonth(nextDate.getMonth() + 1);
-    const nextMonth = nextDate.getMonth();
-    const nextYear = nextDate.getFullYear();
+    // Crear la tabla del calendario
+    const table = document.createElement('table');
+    table.classList.add('calendar');
 
-    // Obtener el primer día del mes actual y el siguiente
-    const firstDayOfMonthCurrent = new Date(currentYear, currentMonth, 1).getDay();
-    const firstDayOfMonthNext = new Date(nextYear, nextMonth, 1).getDay();
+    // Generar el encabezado de la tabla con el nombre del mes
+    const headerRow = document.createElement('tr');
+    const monthHeader = document.createElement('th');
+    monthHeader.colSpan = 7; // Abarcar todas las columnas de la tabla
+    monthHeader.textContent = monthName + ' ' + year;
+    headerRow.appendChild(monthHeader);
+    table.appendChild(headerRow);
 
-    // Obtener el número de días en el mes actual y el siguiente
-    const daysInMonthCurrent = new Date(currentYear, currentMonth + 1, 0).getDate();
-    const daysInMonthNext = new Date(nextYear, nextMonth + 1, 0).getDate();
-
-    // Generar el encabezado de la tabla con los nombres de los días de la semana
+    // Agregar el encabezado de los días de la semana
     const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    let headerRow = '<tr>';
+    const daysRow = document.createElement('tr');
     for (let i = 0; i < daysOfWeek.length; i++) {
-        headerRow += '<th>' + daysOfWeek[i] + '</th>';
+        const dayHeader = document.createElement('th');
+        dayHeader.textContent = daysOfWeek[i];
+        daysRow.appendChild(dayHeader);
     }
-    headerRow += '</tr>';
+    table.appendChild(daysRow);
 
-    // Agregar el encabezado a la tabla
-    calendar.innerHTML += headerRow;
+    // Obtener el primer día del mes
+    const firstDayOfMonth = new Date(year, month, 1).getDay();
 
-    // Generar el calendario para el mes actual
-    generateMonthCalendar(calendar, currentMonth, currentYear, firstDayOfMonthCurrent, daysInMonthCurrent, specialDaysCurrent);
+    // Obtener el número de días en el mes
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    // Generar el calendario para el mes siguiente
-    generateMonthCalendar(calendar, nextMonth, nextYear, firstDayOfMonthNext, daysInMonthNext, specialDaysNext);
-}
-
-function generateMonthCalendar(calendar, month, year, firstDayOfMonth, daysInMonth, specialDays) {
-    // Crear una fila para los días de la semana
-    let row = '<tr>';
-
-    // Agregar celdas vacías para los días de la semana anteriores si el mes no comienza en domingo
+    // Generar las celdas para cada día del mes
+    let row = document.createElement('tr');
+    let dayCount = 0;
     for (let i = 0; i < firstDayOfMonth; i++) {
-        row += '<td></td>';
+        const emptyCell = document.createElement('td');
+        row.appendChild(emptyCell);
+        dayCount++;
     }
-
-    // Generar celdas para cada día del mes
     for (let day = 1; day <= daysInMonth; day++) {
-        // Determinar si el día es especial
         const isSpecialDay = specialDays.includes(day);
-
-        // Agregar la clase "special-day" si el día es especial
-        const dayClass = isSpecialDay ? ' class="special-day"' : '';
-
-        // Agregar la celda del día al calendario
-        row += '<td' + dayClass + '>' + day + '</td>';
-
-        // Si el día es sábado, cerrar la fila actual y comenzar una nueva fila
-        if ((firstDayOfMonth + day) % 7 === 0) {
-            row += '</tr>';
-            calendar.innerHTML += row;
-            row = '<tr>';
+        const dayCell = document.createElement('td');
+        dayCell.textContent = day;
+        dayCell.setAttribute('data-month', month); // Agregar el atributo data-month con el valor del mes
+        dayCell.setAttribute('data-year', year); // Agregar el atributo data-year con el valor del año
+        dayCell.classList.add("selected-date")
+        if (isSpecialDay) {
+            dayCell.classList.add('special-day');
+        }
+        row.appendChild(dayCell);
+        dayCount++;
+        if (dayCount % 7 === 0 || day === daysInMonth) {
+            table.appendChild(row);
+            row = document.createElement('tr');
         }
     }
+    // Obtener todas las celdas de la tabla
+    const cells = table.querySelectorAll('td');
 
-    // Agregar celdas vacías para completar la última semana si es necesario
-    if ((firstDayOfMonth + daysInMonth) % 7 !== 0) {
-        for (let i = 0; i < 7 - ((firstDayOfMonth + daysInMonth) % 7); i++) {
-            row += '<td></td>';
-        }
-    }
-
-    // Cerrar la última fila
-    row += '</tr>';
-
-    // Agregar la fila al calendario
-    calendar.innerHTML += row;
+    // Agregar un listener de eventos onclick a cada celda
+    cells.forEach(cell => {
+        cell.addEventListener('click', function() {
+            const day = parseInt(cell.textContent); // Obtener el número del día
+            const month = parseInt(cell.getAttribute('data-month')); // Obtener el mes
+            const year = parseInt(cell.getAttribute('data-year')); // Obtener el año
+            showEventList(day, month, year); // Llamar a la función para mostrar la lista de eventos
+        });
+    });
+    return table;
 }
 
-function nextMonth() {
-    // Ocultar el botón "Next Month" y mostrar el botón "Previous Month"
-    document.getElementById('nextMonthBtn').style.display = 'none';
-    document.getElementById('prevMonthBtn').style.display = 'inline';
+let selectedDate = ""; // Variable para almacenar la fecha seleccionada
 
-    // Generar el calendario para el próximo mes
-    generateCalendar();
+function showEventList(day, month, year) {
+    // Realizar una solicitud AJAX para obtener la lista de eventos para el día seleccionado
+    fetch(location.origin + "/timeBandsByDay?day=" + day + "&month=" + month + "&year=" + year)
+        .then(response => response.json())
+        .then(timeList => {
+            // Construir la lista de eventos en formato HTML
+            let html = '<h2>Select time</h2>';
+            html += '<select id="timeList" name="timeList">'; // Lista desplegable
+            timeList.forEach(event => {
+                html += '<option value="' + event + '">' + event + '</option>'; // Agregar cada opción de la lista desplegable
+            });
+            html += '</select>';
+
+            // Mostrar la lista de eventos en el contenedor correspondiente en tu vista
+            const eventList = document.getElementById('eventList');
+            eventList.innerHTML = html;
+
+            selectedDate = `${day}/${month + 1}/${year}`;
+        })
+        .catch(error => {
+            console.error('Error al obtener la lista de eventos:', error);
+        });
 }
 
-function prevMonth() {
-    // Ocultar el botón "Previous Month" y mostrar el botón "Next Month"
-    document.getElementById('prevMonthBtn').style.display = 'none';
-    document.getElementById('nextMonthBtn').style.display = 'inline';
+function showConfirmationDetails() {
+    // Obtener el valor seleccionado del select 'operation'
+    const operationValue = document.getElementById('operation').value;
 
-    // Generar el calendario para el mes anterior
-    generateCalendar();
+    // Obtener el valor seleccionado del select dentro de 'eventList'
+    const timeBandValue = document.getElementById('eventList').querySelector('select').value;
+
+    // Construir el mensaje de confirmación con los valores obtenidos
+    const confirmationMessage = `
+        <p><strong>Operation:</strong> ${operationValue}</p>
+        <p><strong>Date:</strong> ${selectedDate}</p>
+        <p><strong>Time Band:</strong> ${timeBandValue}</p>
+    `;
+
+    // Mostrar los detalles de confirmación en la sección correspondiente
+    const confirmationSection = document.getElementById('confirmationDetails');
+    confirmationSection.innerHTML = confirmationMessage;
 }
+
+function confirmAppointment() {
+    // Obtener los valores de los campos del formulario
+    const operationValue = document.getElementById('operation').value;
+    const selectedDate = document.querySelector('.selected-date').textContent;
+    const timeBandValue = document.getElementById('eventList').querySelector('select').value;
+
+    // Realizar una solicitud POST al controlador
+    fetch(location.origin + '/newAppointment?operation=' + operationValue + "&date=" + selectedDate + "&timeBand=" + timeBandValue, {
+        method: 'GET'
+    })
+        .then(response => {
+            if (response.ok) {
+                alert("Appointment confirmed")
+                window.location.href = '/';
+            }
+        })
+        .catch(error => {
+            console.error('Error al enviar la solicitud:', error);
+        });
+}
+
+
+
+
+
+
+

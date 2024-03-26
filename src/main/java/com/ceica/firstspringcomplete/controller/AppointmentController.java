@@ -1,8 +1,6 @@
 package com.ceica.firstspringcomplete.controller;
 
-import com.ceica.firstspringcomplete.model.Appointment;
 import com.ceica.firstspringcomplete.model.Operation;
-import com.ceica.firstspringcomplete.repository.OperationRepository;
 import com.ceica.firstspringcomplete.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,10 +28,10 @@ public class AppointmentController {
         return "appointment";
     }
 
-    @PostMapping("/appointment")
-    public String postAppointment(@RequestParam String operation){
-        System.out.println(operation);
-        return "appointment";
+    @GetMapping("/newAppointment")
+    public String confirmAppointment(@RequestParam String operation, @RequestParam String date, @RequestParam String timeBand) {
+        appointmentService.saveAppointment(operation, date, timeBand);
+        return "home";
     }
 
     private List<String> getOperationNames(){

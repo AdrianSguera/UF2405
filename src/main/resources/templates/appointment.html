@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/css/appointment.css">
 </head>
 <body>
-<form th:action="@{/appointment}" method="post">
+
     <section id="operation-section" style="display: block">
         <label for="operation">Select an option:</label>
         <select id="operation" name="operation">
@@ -16,23 +16,23 @@
         <button type="button" onclick="nextOperationSection()">Next</button>
     </section>
     <section id="date-section" style="display: none">
-        <div id="calendar-container">
-            <table id="calendar"></table>
-            <div th:each="element : ${availableDays}">
-                <p th:text="${element}"></p>
-            </div>
-            <button type="button" id="prevMonthBtn" onclick="prevMonth()" style="display: none">Previous Month</button>
-            <button type="button" id="nextMonthBtn" onclick="nextMonth()">Next Month</button>
+        <div id="calendarContainer">
+            <!-- Calendar logic -->
+        </div>
+        <div id="eventList">
+            <!-- Available time bands -->
         </div>
         <button type="button" onclick="backDateSection()">Back</button>
         <button type="button" onclick="nextDateSection()">Next</button>
     </section>
     <section id="confirmation-section" style="display: none">
-        <p>soy la confirmation section</p>
+        <div id="confirmationDetails">
+            <!-- Confirmation information here -->
+        </div>
         <button type="button" onclick="backConfirmationSection()">Back</button>
-        <input type="submit" value="Confirm">
+        <button type="button" onclick="confirmAppointment()">Confirm</button>
     </section>
-</form>
+
 <script src="/js/appointment.js"></script>
 </body>
 </html>

@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TimeBandRepository extends JpaRepository<TimeBand, Integer> {
 
+    TimeBand findByName(String name);
 }

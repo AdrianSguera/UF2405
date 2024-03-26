@@ -1,20 +1,39 @@
 /* Estilos para el calendario */
-#calendar {
+.calendar-table {
     font-family: Arial, sans-serif;
     border-collapse: collapse;
 }
 
-#calendar th, #calendar td {
+.calendar-table th, .calendar-table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
     width: 50px; /* Ancho fijo para todas las celdas */
 }
 
-#calendar th {
+.calendar-table th {
     background-color: #f2f2f2;
 }
 
 .special-day {
     background-color: lightgreen; /* Cambia el color de fondo para los días especiales */
 }
+
+table.calendar {
+    border-collapse: collapse;
+    width: calc(50% - 5px);
+    margin-right: 5px;
+    float: left;
+}
+
+table.calendar th,
+table.calendar td {
+    border: 1px solid black;
+    padding: 5px;
+    text-align: center;
+}
+
+table.calendar th {
+    background-color: lightgray;
+}
+
