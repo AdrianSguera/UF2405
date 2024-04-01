@@ -1,28 +1,92 @@
 function nextOperationSection() {
     document.getElementById("operation-section").style.display = "none";
     document.getElementById("date-section").style.display = "block";
+    document.getElementById("progress25").style.display = "none";
+    document.getElementById("progress50").style.display = "block";
 }
 
 function backDateSection() {
     document.getElementById("date-section").style.display = "none";
     document.getElementById("operation-section").style.display = "block";
+    document.getElementById("progress50").style.display = "none";
+    document.getElementById("progress25").style.display = "block";
 }
 
 function nextDateSection() {
     document.getElementById("date-section").style.display = "none";
     document.getElementById("confirmation-section").style.display = "block";
+    document.getElementById("progress50").style.display = "none";
+    document.getElementById("progress75").style.display = "block";
     showConfirmationDetails()
 }
 
 function backConfirmationSection() {
     document.getElementById("confirmation-section").style.display = "none";
     document.getElementById("date-section").style.display = "block";
+    document.getElementById("progress75").style.display = "none";
+    document.getElementById("progress50").style.display = "block";
 }
 
+document.getElementById('operation').addEventListener('change', function() {
+    // Obtener el valor de la opción seleccionada
+    const selectedValue = this.value;
 
-document.addEventListener("DOMContentLoaded", function() {
-    generateCalendar();
+    // Llamar a la función correspondiente según el valor seleccionado
+    if (selectedValue === 'Psicologia Adulto') {
+        handlePsicologiaAdulto();
+    } else if (selectedValue === 'Psicologia Infantil') {
+        handlePsicologiaInfantil();
+    } else if (selectedValue === 'Gestion de Extranjeria') {
+        handleGestionExtranjeria();
+    } else {
+        handleGestionLaboral();
+    }
 });
+
+function handlePsicologiaAdulto() {
+    document.getElementById("image1").style.display = "block";
+    document.getElementById("image2").style.display = "none";
+    document.getElementById("image3").style.display = "none";
+    document.getElementById("image4").style.display = "none";
+    document.getElementById("text1").style.display = "block";
+    document.getElementById("text2").style.display = "none";
+    document.getElementById("text3").style.display = "none";
+    document.getElementById("text4").style.display = "none";
+
+}
+
+function handlePsicologiaInfantil() {
+    document.getElementById("image1").style.display = "none";
+    document.getElementById("image2").style.display = "block";
+    document.getElementById("image3").style.display = "none";
+    document.getElementById("image4").style.display = "none";
+    document.getElementById("text1").style.display = "none";
+    document.getElementById("text2").style.display = "block";
+    document.getElementById("text3").style.display = "none";
+    document.getElementById("text4").style.display = "none";
+}
+
+function handleGestionExtranjeria() {
+    document.getElementById("image1").style.display = "none";
+    document.getElementById("image2").style.display = "none";
+    document.getElementById("image3").style.display = "block";
+    document.getElementById("image4").style.display = "none";
+    document.getElementById("text1").style.display = "none";
+    document.getElementById("text2").style.display = "none";
+    document.getElementById("text3").style.display = "block";
+    document.getElementById("text4").style.display = "none";
+}
+
+function handleGestionLaboral() {
+    document.getElementById("image1").style.display = "none";
+    document.getElementById("image2").style.display = "none";
+    document.getElementById("image3").style.display = "none";
+    document.getElementById("image4").style.display = "block";
+    document.getElementById("text1").style.display = "none";
+    document.getElementById("text2").style.display = "none";
+    document.getElementById("text3").style.display = "none";
+    document.getElementById("text4").style.display = "block";
+}
 
 function generateCalendar() {
     // Obtener el mes y año actual
@@ -114,8 +178,8 @@ function generateMonthCalendarHTML(month, year, specialDays) {
         row.appendChild(dayCell);
         dayCount++;
         if (dayCount % 7 === 0 || day === daysInMonth) {
-            table.appendChild(row);
             row = document.createElement('tr');
+            table.appendChild(row);
         }
     }
     // Obtener todas las celdas de la tabla
@@ -127,7 +191,8 @@ function generateMonthCalendarHTML(month, year, specialDays) {
             const day = parseInt(cell.textContent); // Obtener el número del día
             const month = parseInt(cell.getAttribute('data-month')); // Obtener el mes
             const year = parseInt(cell.getAttribute('data-year')); // Obtener el año
-            showEventList(day, month, year); // Llamar a la función para mostrar la lista de eventos
+            if (cell.classList.contains('special-day'))
+                showEventList(day, month, year); // Llamar a la función para mostrar la lista de eventos
         });
     });
     return table;
@@ -170,7 +235,7 @@ function showConfirmationDetails() {
     const confirmationMessage = `
         <p><strong>Operation:</strong> ${operationValue}</p>
         <p><strong>Date:</strong> ${selectedDate}</p>
-        <p><strong>Time Band:</strong> ${timeBandValue}</p>
+        <p><strong>Time:</strong> ${timeBandValue}</p>
     `;
 
     // Mostrar los detalles de confirmación en la sección correspondiente
@@ -181,7 +246,6 @@ function showConfirmationDetails() {
 function confirmAppointment() {
     // Obtener los valores de los campos del formulario
     const operationValue = document.getElementById('operation').value;
-    const selectedDate = document.querySelector('.selected-date').textContent;
     const timeBandValue = document.getElementById('eventList').querySelector('select').value;
 
     // Realizar una solicitud POST al controlador
@@ -199,9 +263,4 @@ function confirmAppointment() {
         });
 }
 
-
-
-
-
-
-
+generateCalendar();

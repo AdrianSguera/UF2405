@@ -3,10 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
+<header>
+    <img th:src="@{/img/Captura.png}" alt="">
+</header>
 <body>
-<p>HOME</p>
-<a href="login"><button>Login</button></a>
-<a href="/appointment"><button>New appointment</button></a>
+<div class="home-button-container">
+    <a class="home-button" href="login">Login</a>
+    <a class="home-button" href="/appointment">New appointment</a>
+</div>
+<div class="home-text-container">
+    <h1>Welcome to the page</h1>
+    <h2>Services:</h2>
+    <ul>
+        <li>Psicologia infantil</li>
+        <li>Psicologia adulto</li>
+        <li>Gestion de extranjeria</li>
+        <li>Gestion laboral</li>
+    </ul>
+    <p>If you are interested, log in</p>
+</div>
 </body>
 </html>

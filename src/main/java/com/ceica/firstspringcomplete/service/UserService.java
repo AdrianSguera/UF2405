@@ -24,7 +24,7 @@ public class UserService implements UserDetailsService {
 
     private final AuthorityRepository authorityRepository;
 
-    private BCryptPasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository, AuthorityRepository authorityRepository) {

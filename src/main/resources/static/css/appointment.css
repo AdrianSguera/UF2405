@@ -1,39 +1,63 @@
-/* Estilos para el calendario */
-.calendar-table {
-    font-family: Arial, sans-serif;
-    border-collapse: collapse;
+.calendar td {
+    width: 50px;
+    height: 30px;
 }
 
-.calendar-table th, .calendar-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-    width: 50px; /* Ancho fijo para todas las celdas */
+.calendar td:hover {
+    transform: scale(90%);
+    cursor: pointer;
 }
 
-.calendar-table th {
-    background-color: #f2f2f2;
+.calendar td:active {
+    transform: scale(110%);
 }
 
-.special-day {
-    background-color: lightgreen; /* Cambia el color de fondo para los días especiales */
+.calendar td.special-day {
+    background-color: #90E0EF;
 }
 
-table.calendar {
-    border-collapse: collapse;
-    width: calc(50% - 5px);
-    margin-right: 5px;
-    float: left;
+/* Estilos para el select */
+#operation-section select {
+    padding: 10px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    border: 1px solid #ccc; /* Borde */
+    box-sizing: border-box; /* Incluye el relleno y el borde en el ancho total */
+    background-color: #ffffff; /* Color de fondo */
+    font-size: 16px; /* Tamaño de fuente */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el select */
+    margin-bottom: 10px; /* Espacio entre el select y el siguiente elemento */
 }
 
-table.calendar th,
-table.calendar td {
-    border: 1px solid black;
-    padding: 5px;
-    text-align: center;
+.date-section-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra horizontalmente los elementos */
 }
 
-table.calendar th {
-    background-color: lightgray;
+.operation-section-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra horizontalmente los elementos */
 }
+
+.progressBar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra horizontalmente los elementos */
+}
+
+.progress-bar{
+    width: 600px;
+}
+
+.image-selection{
+    width: 350px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.text-selection{
+    margin-bottom: 10px;
+}
+
 

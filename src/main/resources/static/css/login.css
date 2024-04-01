@@ -1,0 +1,37 @@
+/* Estilos para el cuerpo de la página */
+body {
+    text-align: center; /* Centra el contenido horizontalmente */
+    margin-top: 50px; /* Ajusta el margen superior según sea necesario */
+}
+
+/* Estilos para el formulario de login */
+form {
+    display: flex; /* Usa flexbox para alinear elementos verticalmente */
+    flex-direction: column; /* Coloca los elementos uno debajo del otro */
+    align-items: center; /* Centra los elementos horizontalmente */
+    text-align: center; /* Alinea el texto horizontalmente */
+    padding: 20px;
+}
+
+/* Estilos para los campos de entrada */
+input[type="text"],
+input[type="password"],
+input[type="submit"] {
+    margin-bottom: 10px; /* Espacio entre los elementos */
+    padding: 10px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    border: 1px solid #ccc; /* Borde */
+    box-sizing: border-box; /* Incluye el relleno y el borde en el ancho total */
+}
+
+/* Estilos para los mensajes de error y logout */
+div {
+    color: black; /* Color del texto de los mensajes */
+    margin-bottom: 10px; /* Ajusta el margen inferior según sea necesario */
+}
+
+/* Estilos para los enlaces de registro */
+p {
+    margin-top: 20px; /* Ajusta el margen superior según sea necesario */
+}
+
