@@ -27,6 +27,8 @@ header {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    font-family: "Arial Black", serif;
+    color: darkblue;
 }
 
 /* Estilos para los enlaces de los botones al pasar el cursor */

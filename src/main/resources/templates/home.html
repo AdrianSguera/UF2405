@@ -10,19 +10,29 @@
 </header>
 <body>
 <div class="home-button-container">
-    <a class="home-button" href="login">Login</a>
-    <a class="home-button" href="/appointment">New appointment</a>
+    <div th:if="${#authorization.expression('isAuthenticated()')}">
+        <!-- Contenido visible solo para usuarios autenticados -->
+        <form th:action="@{/logout}" method="post">
+            <a class="home-button" href="/appointment">New appointment</a>
+            <input class="home-button" type="submit" value="Logout"/>
+        </form>
+    </div>
+    <div th:unless="${#authorization.expression('isAuthenticated()')}">
+        <!-- Contenido visible solo para usuarios no autenticados -->
+        <a class="home-button" href="/appointment">New appointment</a>
+        <a class="home-button" href="login">Login</a>
+    </div>
 </div>
 <div class="home-text-container">
     <h1>Welcome to the page</h1>
     <h2>Services:</h2>
     <ul>
-        <li>Psicologia infantil</li>
-        <li>Psicologia adulto</li>
-        <li>Gestion de extranjeria</li>
-        <li>Gestion laboral</li>
+        <li><a th:href="@{/psicologiaInfantil}">Psicologia infantil</a></li>
+        <li><a href="/">Psicologia adulto</a></li>
+        <li><a href="/">Gestion de extranjeria</a></li>
+        <li><a href="/">Gestion laboral</a></li>
     </ul>
-    <p>If you are interested, log in</p>
+    <p>If you are interested, please log in</p>
 </div>
 </body>
 </html>

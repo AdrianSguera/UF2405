@@ -35,9 +35,4 @@ public class LoginController {
         userService.newUser(user);
         return "login";
     }
-
-    @GetMapping("/error")
-    public String error(){
-        return "home";
-    }
 }

@@ -152,47 +152,56 @@ function generateMonthCalendarHTML(month, year, specialDays) {
     table.appendChild(daysRow);
 
     // Obtener el primer día del mes
-    const firstDayOfMonth = new Date(year, month, 1).getDay();
+    const firstDayOfMonth = new Date(year, month, 1).getDay()+1;
 
     // Obtener el número de días en el mes
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
+    // Calcular el número de celdas vacías necesarias para completar la primera semana
+    const emptyCellsBeforeFirstDay = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1;
+
     // Generar las celdas para cada día del mes
     let row = document.createElement('tr');
-    let dayCount = 0;
-    for (let i = 0; i < firstDayOfMonth; i++) {
+
+    // Agregar celdas vacías antes del primer día del mes
+    for (let i = 0; i < emptyCellsBeforeFirstDay; i++) {
         const emptyCell = document.createElement('td');
         row.appendChild(emptyCell);
-        dayCount++;
     }
+
+    // Agregar las celdas para los días del mes
     for (let day = 1; day <= daysInMonth; day++) {
-        const isSpecialDay = specialDays.includes(day);
         const dayCell = document.createElement('td');
         dayCell.textContent = day;
         dayCell.setAttribute('data-month', month); // Agregar el atributo data-month con el valor del mes
         dayCell.setAttribute('data-year', year); // Agregar el atributo data-year con el valor del año
         dayCell.classList.add("selected-date")
-        if (isSpecialDay) {
+        if (specialDays.includes(day)) {
             dayCell.classList.add('special-day');
         }
         row.appendChild(dayCell);
-        dayCount++;
-        if (dayCount % 7 === 0 || day === daysInMonth) {
-            row = document.createElement('tr');
+
+        if ((emptyCellsBeforeFirstDay + day) % 7 === 0 || day === daysInMonth) {
+            // Si es el último día de la semana o el último día del mes, crear una nueva fila
             table.appendChild(row);
+            row = document.createElement('tr');
         }
     }
+
     // Obtener todas las celdas de la tabla
     const cells = table.querySelectorAll('td');
 
     // Agregar un listener de eventos onclick a cada celda
     cells.forEach(cell => {
         cell.addEventListener('click', function() {
+
             const day = parseInt(cell.textContent); // Obtener el número del día
             const month = parseInt(cell.getAttribute('data-month')); // Obtener el mes
             const year = parseInt(cell.getAttribute('data-year')); // Obtener el año
-            if (cell.classList.contains('special-day'))
+            if (cell.classList.contains('special-day')) {
+                cellsOnClick();
                 showEventList(day, month, year); // Llamar a la función para mostrar la lista de eventos
+            }
         });
     });
     return table;
@@ -264,3 +273,36 @@ function confirmAppointment() {
 }
 
 generateCalendar();
+
+function cellsOnClick() {
+    // Obtener todas las tablas con la clase "calendar"
+    const calendars = document.getElementsByClassName("calendar");
+
+    // Crear un array vacío para almacenar todas las celdas de ambas tablas
+    const allCells = [];
+
+    // Iterar sobre todas las tablas
+    for (let i = 0; i < calendars.length; i++) {
+        const table = calendars[i];
+
+        // Obtener todas las celdas de la tabla actual y agregarlas al array allCells
+        const cells = table.querySelectorAll('td');
+        allCells.push(...cells);
+    }
+
+    // Asignar el manejador de eventos onclick a cada celda
+    allCells.forEach(cell => {
+        cell.onclick = () => {
+            // Restaurar el estilo de todas las celdas
+            allCells.forEach(cell => {
+                cell.style.transform = "scale(1)";
+                cell.style.color = "black";
+            });
+
+            // Aplicar estilos a la celda clickeada
+            cell.style.transform = "scale(0.9)";
+            cell.style.color = "grey";
+        };
+    });
+}
+

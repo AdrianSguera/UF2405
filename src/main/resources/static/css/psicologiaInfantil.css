@@ -1,0 +1,11 @@
+.pic-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pic-container img {
+    width: 800px;
+    height: auto;
+    margin-bottom: 5px;
+}

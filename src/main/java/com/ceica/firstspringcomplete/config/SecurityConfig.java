@@ -31,7 +31,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/","/register").permitAll()
+                        .requestMatchers("/","/register","/psicologiaInfantil").permitAll()
                         .requestMatchers("/js/**","/css/**","/img/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -39,7 +39,12 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .permitAll()
                 )
-                .logout((logout) -> logout.permitAll());
+                .logout((logout) -> logout
+                .logoutUrl("/logout") // Ruta de logout
+                .logoutSuccessUrl("/") // Página a la que redirigir después del logout
+                .invalidateHttpSession(true) // Invalidar la sesión
+                .deleteCookies("JSESSIONID") // Eliminar las cookies, si las hubiera
+                );
 
         return http.build();
     }
