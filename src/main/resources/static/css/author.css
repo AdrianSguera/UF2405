@@ -1,0 +1,15 @@
+/* Estilos adicionales */
+.table-actions {
+    white-space: nowrap; /* Evita que los botones se envuelvan */
+}
+@media (max-width: 800px) {
+    /* Estilos específicos para dispositivos pequeños */
+    .table-actions {
+        display: block;
+        margin-top: 5px; /* Espaciado superior entre botones */
+    }
+    .table-actions .btn {
+        display: block;
+        width: 100%;
+    }
+}
