@@ -27,7 +27,10 @@ public class BookService {
     private final UserRepository userRepository;
 
     @Value("${app.upload.dir:${user.home}}/Desktop/Programas/IdeaProjects/UF2405/src/main/resources/static/img")
-    private String uploadDir;
+    private String uploadDir1;
+
+    @Value("${app.upload.dir:${user.home}}/Desktop/Programas/IdeaProjects/UF2405/target/classes/static/img")
+    private String uploadDir2;
 
     @Autowired
     public BookService(AuthorRepository authorRepository, BookRepository bookRepository,
@@ -59,9 +62,15 @@ public class BookService {
 
     public void newBook(String title, String author, String description, MultipartFile imageFile) {
         String fileName = imageFile.getOriginalFilename();
-        Path path = Paths.get(uploadDir + File.separator + fileName);
+        Path path1 = Paths.get(uploadDir1 + File.separator + fileName);
         try {
-            Files.write(path, imageFile.getBytes());
+            Files.write(path1, imageFile.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Path path2 = Paths.get(uploadDir2 + File.separator + fileName);
+        try {
+            Files.write(path2, imageFile.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -8,3 +8,7 @@
     width: 30%; /* Ajusta el ancho de cada tarjeta según tu diseño */
     margin-bottom: 20px; /* Espacio entre las tarjetas */
 }
+
+.form {
+    margin-bottom: 50px;
+}

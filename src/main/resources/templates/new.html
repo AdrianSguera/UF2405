@@ -10,6 +10,7 @@
 </head>
 <body>
 <h1>New book</h1>
+<a th:href="@{/books}"><button>Return</button></a>
 <div class="card-deck mt-4">
     <div class="card form">
         <form th:action="@{/newBook}" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
